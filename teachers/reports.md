@@ -24,7 +24,7 @@ Questerix gives you several levels of reporting — from a quick class-wide over
 | Mastery < 40% on most topics          | May need extra support or intervention  |
 | Mastery 90–100%                       | Student may be ready for harder content |
 
-![Group overview report](../public/screenshots/teacher-group-report.png)
+![Group overview report](/screenshots/teacher-group-report.png)
 
 ---
 

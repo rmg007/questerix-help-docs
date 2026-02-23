@@ -61,7 +61,7 @@ If you need to add many students at once:
 4. Upload the completed file.
 5. Review the preview and click **Import**.
 
-![Bulk import screen](../public/screenshots/admin-bulk-import.png)
+![Bulk import screen](/screenshots/admin-bulk-import.png)
 
 ::: tip Validation errors
 If some rows fail, the rest still import. Download the error report to see which rows need fixing.

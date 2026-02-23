@@ -25,7 +25,7 @@ This is the **user help center** for Questerix — an educational platform for s
 2. **Format every guide** using: Problem → Solution → Verification.
 3. **Empathetic tone**: Assume the user is confused or frustrated. Be calm and helpful.
 4. **Active voice**: "Click the button" not "The button should be clicked."
-5. **Screenshots are mandatory** for every multi-step process. Reference them as `![Step description](../screenshots/feature-name.png)`.
+5. **Screenshots are mandatory** for every multi-step process. Reference them as `![Step description](/screenshots/feature-name.png)`.
 
 ## Content Structure
 

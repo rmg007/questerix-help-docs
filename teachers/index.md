@@ -50,7 +50,7 @@ Groups in Questerix work like class lists. Each group has its own set of student
 
 **Verification:** Your new group appears in the Groups list.
 
-![Create a new group](../public/screenshots/teacher-create-group.png)
+![Create a new group](/screenshots/teacher-create-group.png)
 
 ---
 
@@ -90,7 +90,7 @@ If a student doesn't appear in the search, ask your school admin to create their
 
 **Verification:** Each student row shows a coloured mastery bar.
 
-![Group progress overview](../public/screenshots/teacher-group-progress.png)
+![Group progress overview](/screenshots/teacher-group-progress.png)
 
 ---
 

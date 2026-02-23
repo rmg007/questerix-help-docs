@@ -44,7 +44,7 @@ When you log in, you'll see your child's learning summary. Here's what each sect
 | **Mastery**         | How well they know each topic (0–100%)          |
 | **Recent Activity** | Their latest practice sessions with scores      |
 
-![Parent dashboard overview](../public/screenshots/parent-dashboard.png)
+![Parent dashboard overview](/screenshots/parent-dashboard.png)
 
 ---
 
@@ -60,7 +60,7 @@ When you log in, you'll see your child's learning summary. Here's what each sect
 
 **Verification:** Each topic should have a coloured bar — green (strong), amber (improving), red (needs work).
 
-![Progress view by topic](../public/screenshots/parent-progress.png)
+![Progress view by topic](/screenshots/parent-progress.png)
 
 ---
 

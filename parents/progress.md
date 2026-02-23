@@ -19,7 +19,7 @@ Each topic in your child's curriculum has a **Mastery Score** from 0% to 100%.
 
 The score goes up when your child answers questions correctly, and it slowly decays over time if they stop practicing. This is intentional — it reflects real memory, not just a one-time performance.
 
-![Mastery score breakdown](../public/screenshots/parent-mastery.png)
+![Mastery score breakdown](/screenshots/parent-mastery.png)
 
 ---
 
