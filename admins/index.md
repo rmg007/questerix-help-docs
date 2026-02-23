@@ -1,8 +1,22 @@
-<!-- Last updated: 2026-02-22 -->
+<!-- Last updated: 2026-02-23 -->
 
 # Admins — Onboarding Your School
 
 This guide walks you through setting up Questerix for your school from scratch.
+
+---
+
+**Problem:** You’re responsible for setting up Questerix for your school.
+
+**Solution:**
+
+1. Log in to the Admin Panel.
+2. Check the sidebar so you know where everything is.
+3. Set up Domains, Skills, and Questions.
+4. Create teacher and student accounts.
+5. Assign students to the right Grade App.
+
+**Verification:** Teachers can log in, students can practice, and you can see activity on the Dashboard.
 
 ---
 

@@ -2,5 +2,9 @@ node_modules/
 dist/
 .vitepress/dist/
 .vitepress/cache/
+.playwright/
+playwright-report/
+.cache/
+.env.screenshots.local
 .env
 .env.local

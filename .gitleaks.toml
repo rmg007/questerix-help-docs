@@ -1,0 +1,13 @@
+title = "Questerix Help Docs - Gitleaks config"
+
+[extend]
+useDefault = true
+
+# This repo is mostly markdown; keep allowlists tight.
+[allowlist]
+description = "Ignore generated output (should be gitignored anyway)"
+paths = [
+  '''^\.vitepress/dist/''',
+  '''^\.vitepress/cache/'''
+]
+

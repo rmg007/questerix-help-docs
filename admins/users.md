@@ -1,8 +1,20 @@
-<!-- Last updated: 2026-02-22 -->
+<!-- Last updated: 2026-02-23 -->
 
 # Managing Users
 
 This page covers everything you need to manage teacher, student, and parent accounts.
+
+---
+
+**Problem:** You need to add, remove, or update people in your school.
+
+**Solution:**
+
+1. Use **Users → Teachers** to invite or deactivate teachers.
+2. Use **Users → Students** to create, import, or deactivate students.
+3. Link parent accounts from a student’s profile.
+
+**Verification:** The person appears in the correct list with the right status (Active / Pending / Deactivated).
 
 ---
 

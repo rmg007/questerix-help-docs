@@ -1,0 +1,35 @@
+name: docs-check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Check doc rules
+        run: npm run docs:check
+
+      - name: Check screenshots referenced in docs
+        run: npm run screenshots:check
+
+      - name: Build site
+        run: npm run build
+

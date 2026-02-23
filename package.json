@@ -7,9 +7,13 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
-    "preview": "vitepress preview"
+    "preview": "vitepress preview",
+    "screenshots:capture": "node scripts/capture-screenshots.mjs",
+    "screenshots:check": "node scripts/check-screenshots.mjs",
+    "docs:check": "node scripts/check-doc-rules.mjs"
   },
   "devDependencies": {
+    "playwright": "^1.58.2",
     "vitepress": "^1.5.0"
   }
 }

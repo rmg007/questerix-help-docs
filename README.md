@@ -41,6 +41,26 @@ SCREENSHOT_CATALOG.md  # Track which screenshots are needed / stale
 2. The Technical Writer Agent reads it and updates the relevant persona pages
 3. Add new screenshots to `public/screenshots/` and log them in `SCREENSHOT_CATALOG.md`
 
+## Screenshots (Automated)
+
+This repo includes a Playwright-based pipeline to **capture high-resolution, full-page screenshots** from `app.questerix.com`
+and save them into `public/screenshots/`.
+
+```bash
+# Capture all screenshots listed in SCREENSHOT_CATALOG.md (role-by-role)
+npm run screenshots:capture
+
+# Verify docs don't reference missing screenshot files
+npm run screenshots:check
+```
+
+Notes:
+- The capture script is designed for the Questerix **Flutter** UI and enables accessibility semantics automatically.
+- You can override the default test credentials using env vars (or by filling in `.env.screenshots.local`):
+  - `QUESTERIX_STUDENT_EMAIL` / `QUESTERIX_STUDENT_PASSWORD`
+  - `QUESTERIX_TEACHER_EMAIL` / `QUESTERIX_TEACHER_PASSWORD`
+  - `QUESTERIX_ADMIN_EMAIL` / `QUESTERIX_ADMIN_PASSWORD`
+
 ## Deployment
 
 Deployed automatically via Cloudflare Pages on push to `main`.
@@ -60,3 +80,27 @@ Deployed automatically via Cloudflare Pages on push to `main`.
 ## Agent Instructions
 
 See `AGENTS.md` for the Technical Writer persona instructions.
+
+## Agent Context Pack (for Copilot/Windsurf/etc.)
+
+- **Universal**: `AI_CONTEXT.md`
+- **Contributor rules**: `CONTRIBUTING.md`
+- **Copilot-specific**: `.github/copilot-instructions.md`
+
+## Security (Gitleaks)
+
+This repo runs **Gitleaks** in GitHub Actions on PRs and pushes to `main` to help prevent
+accidentally committing secrets.
+
+- **Workflow**: `.github/workflows/gitleaks.yml`
+- **Config**: `.gitleaks.toml`
+
+Note: Gitleaks Action v2 requires a `GITLEAKS_LICENSE` secret for **GitHub organizations**
+(personal accounts don’t need it).
+
+## Cursor MCPs (no Figma)
+
+We don’t use the Figma MCP in this repo.
+
+- **MCP setup guide**: `.cursor/README.md`
+- **Team-shared MCP config**: `.cursor/mcp.json`

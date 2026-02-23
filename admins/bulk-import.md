@@ -1,8 +1,21 @@
-<!-- Last updated: 2026-02-22 -->
+<!-- Last updated: 2026-02-23 -->
 
 # Bulk Question Import
 
 Bulk Import lets you add hundreds of questions at once using a spreadsheet. This is the fastest way to populate your curriculum.
+
+---
+
+**Problem:** You need to add lots of questions quickly.
+
+**Solution:**
+
+1. Download the import template.
+2. Fill in your questions in the spreadsheet.
+3. Upload the file and import.
+4. Review the results and fix any errors.
+
+**Verification:** You can see the imported questions in the **Questions** list, and any failed rows show up in the error report.
 
 ---
 

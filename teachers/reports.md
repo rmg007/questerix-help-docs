@@ -1,8 +1,21 @@
-<!-- Last updated: 2026-02-22 -->
+<!-- Last updated: 2026-02-23 -->
 
 # Reading Reports
 
 Questerix gives you several levels of reporting — from a quick class-wide overview down to a single student's answer on a specific question.
+
+---
+
+**Problem:** You need to find where a student is stuck.
+
+**Solution:**
+
+1. Click a **Group** in the sidebar.
+2. Use the **Group Overview** to spot patterns.
+3. Click a **Student** to see their detailed report.
+4. Open a session to see the **question-level** breakdown.
+
+**Verification:** You can see both mastery and the exact questions a student got right or wrong.
 
 ---
 
