@@ -1,0 +1,17 @@
+name = "questerix-help-docs"
+compatibility_date = "2026-02-22"
+
+[env.production]
+name = "questerix-help-docs"
+
+# Build config for Cloudflare Pages
+# Build command: npm run build
+# Output directory: .vitepress/dist
+# Root directory: /
+# Node.js version: 18
+
+# Domain: help.questerix.com (DO NOT CONNECT until ready to publish)
+# For now: use the internal .pages.dev preview URL only.
+
+# Secrets (set via Cloudflare Dashboard or wrangler secret put):
+# None required — this is a static documentation site.

@@ -1,0 +1,76 @@
+/* =============================================================
+   Questerix Design Tokens — Static Copy for VitePress Theme
+   Source: design-system/generated/css-variables.css
+   Last synced: 2026-02-22
+   To update: manually copy from the main repo's generated file.
+   ============================================================= */
+
+:root {
+  /* Brand Colors */
+  --color-primary: #319795;
+  --color-secondary: #6B46C1;
+  --color-accent: #ED8936;
+
+  /* Semantic Colors */
+  --color-success: #38A169;
+  --color-warning: #D69E2E;
+  --color-error: #E53E3E;
+  --color-info: #3182CE;
+
+  /* Neutral Colors */
+  --color-neutral-50: #F7FAFC;
+  --color-neutral-100: #EDF2F7;
+  --color-neutral-200: #E2E8F0;
+  --color-neutral-300: #CBD5E0;
+  --color-neutral-400: #A0AEC0;
+  --color-neutral-500: #718096;
+  --color-neutral-600: #4A5568;
+  --color-neutral-700: #2D3748;
+  --color-neutral-800: #1A202C;
+  --color-neutral-900: #171923;
+
+  /* Light Theme */
+  --theme-background: #F7FAFC;
+  --theme-surface: #FFFFFF;
+  --theme-surface-variant: #EDF2F7;
+  --theme-text: #1A202C;
+  --theme-text-secondary: #4A5568;
+  --theme-text-muted: #718096;
+  --theme-border: #E2E8F0;
+  --theme-border-focus: #319795;
+
+  /* Map to VitePress CSS variables */
+  --vp-c-brand-1: #319795;
+  --vp-c-brand-2: #2C8180;
+  --vp-c-brand-3: #6B46C1;
+  --vp-c-brand-soft: rgba(49, 151, 149, 0.1);
+
+  /* Typography */
+  --font-sans: Inter, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --vp-font-family-base: var(--font-sans);
+  --vp-font-family-mono: var(--font-mono);
+
+  /* Border Radius */
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --vp-border-radius: var(--radius-md);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #319795 0%, #6B46C1 100%);
+}
+
+/* Dark Theme */
+.dark {
+  --theme-background: #171923;
+  --theme-surface: #1A202C;
+  --theme-surface-variant: #2D3748;
+  --theme-text: #F7FAFC;
+  --theme-text-secondary: #CBD5E0;
+  --theme-text-muted: #A0AEC0;
+  --theme-border: #4A5568;
+  --theme-border-focus: #4FD1C5;
+
+  --vp-c-brand-soft: rgba(79, 209, 197, 0.1);
+}

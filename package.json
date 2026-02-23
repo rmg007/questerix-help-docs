@@ -1,0 +1,14 @@
+{
+  "name": "questerix-help-docs",
+  "version": "0.1.0",
+  "description": "Questerix user help center — guides for parents, teachers, and admins.",
+  "private": true,
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "^1.5.0"
+  }
+}
