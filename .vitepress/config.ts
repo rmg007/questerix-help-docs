@@ -44,6 +44,7 @@ export default defineConfig({
           items: [
             { text: 'School Onboarding', link: '/admins/' },
             { text: 'Managing Users', link: '/admins/users' },
+            { text: 'Creating Questions', link: '/admins/questions' },
             { text: 'Bulk Question Import', link: '/admins/bulk-import' },
           ],
         },

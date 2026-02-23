@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Questerix user help center — guides for parents, teachers, and admins.",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
