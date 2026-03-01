@@ -35,3 +35,5 @@
 ---
 
 _Add new entries here as new features are documented._
+
+- [ ] `/screenshots/admin-sso-configuration.png` — SSO configuration (add identity provider) — Referenced in `admins/sso-configuration.md`

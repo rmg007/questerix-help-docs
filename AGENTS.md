@@ -50,6 +50,10 @@ When a "Feature Snapshot" appears in `_incoming/`:
 4. Add a `<!-- Last updated: YYYY-MM-DD -->` comment at the top of every changed file.
 5. Note which screenshots are now stale in `SCREENSHOT_CATALOG.md`.
 
+## Agent Automation (new)
+
+This repository supports automated coding agents (Cursor, Windsurf, Antigravity IDE, Kiro, etc.) that help capture screenshots, update docs, and deploy changes. The detailed, step-by-step agent workflow is in `AGENT_AUTOMATION.md`. Agents must follow the security rules in that file and never commit secrets.
+
 ## Deployment Rules
 
 - **DO NOT** connect `help.questerix.com` domain until explicitly instructed.

@@ -44,13 +44,19 @@ If a student doesn't show up in the search, they don't have a Questerix account 
 3. Click the three-dot menu (⋮) next to their name.
 4. Click **Remove from Group**.
 
-The student's data is not deleted — they just leave this group.
+::: tip Note
+Removing a student from a group does not delete their data. They are simply unlinked from this group.
+:::
 
 ---
 
 ## Archive a Group
 
 When a term or year ends, you can archive a group instead of deleting it. This keeps the historical data but removes the group from your active view.
+
+::: tip Why Archive?
+Archiving ensures that historical data remains accessible for reporting and compliance purposes.
+:::
 
 1. Open the group.
 2. Click **Settings** (top right).

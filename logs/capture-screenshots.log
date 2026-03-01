@@ -1,0 +1,26 @@
+2026-02-27T14:19:17.757Z [INFO]: Starting capture-screenshots script
+2026-02-27T14:19:18.115Z [INFO]: 
+=== Role: admin (using saved session) ===
+2026-02-27T14:19:18.878Z [ERROR]: Failed to navigate to /:
+2026-02-27T14:19:29.985Z [INFO]: Starting capture-screenshots script
+2026-02-27T14:19:31.339Z [INFO]: 
+=== Role: admin (using saved session) ===
+2026-02-27T14:19:32.902Z [ERROR]: Failed to navigate to /:
+2026-02-27T14:28:24.952Z [INFO]: Starting capture-screenshots script
+2026-02-27T14:28:25.286Z [INFO]: 
+=== Role: admin (manual login) ===
+2026-02-27T14:28:25.557Z [ERROR]: Failed to navigate to /:
+2026-02-27T14:28:45.242Z [INFO]: Starting capture-screenshots script
+2026-02-27T14:28:45.471Z [INFO]: 
+=== Role: admin (manual login) ===
+2026-02-27T14:29:16.484Z [ERROR]: Failed to enable Flutter semantics:
+2026-02-27T14:29:29.773Z [INFO]: Starting capture-screenshots script
+2026-02-27T14:29:30.192Z [INFO]: 
+=== Role: admin (manual login) ===
+2026-02-27T14:30:01.199Z [ERROR]: Failed to enable Flutter semantics:
+2026-02-27T14:30:27.463Z [INFO]: Starting capture-screenshots script
+2026-02-27T14:30:28.133Z [INFO]: 
+=== Role: admin (manual login) ===
+2026-02-27T14:31:00.491Z [INFO]: [admin] Manual login needed. A browser window should be open.
+     Please log in now (we'll continue automatically when you're in). Timeout: 900s
+2026-02-27T14:46:01.407Z [ERROR]: [admin] Manual login timed out after 900s.

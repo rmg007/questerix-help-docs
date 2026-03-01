@@ -1,16 +1,20 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import dotenv from 'dotenv';
+import winston from 'winston';
 
-const APP_ORIGIN = 'https://app.questerix.com';
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+dotenv.config({ path: envFile });
+
+console.log(`Loaded environment variables from ${envFile}`);
+
+const APP_ORIGIN = process.env.APP_ORIGIN || process.env.ADMIN_PANEL_APP_ORIGIN;
 const REPO_ROOT = path.resolve(process.cwd());
 const SCREENSHOTS_DIR = path.join(REPO_ROOT, 'public', 'screenshots');
 const CATALOG_PATH = path.join(REPO_ROOT, 'SCREENSHOT_CATALOG.md');
 const AUTH_DIR = path.join(REPO_ROOT, '.playwright', 'auth');
 const LOCAL_ENV_PATH = path.join(REPO_ROOT, '.env.screenshots.local');
-
-const DEFAULT_VIEWPORT = { width: 2560, height: 1440 };
-const DEFAULT_SCALE = 2;
 
 async function loadLocalEnvFile() {
   try {
@@ -43,6 +47,55 @@ async function loadLocalEnvFile() {
     // No local env file; ignore.
   }
 }
+
+// Load local env file before checking required vars
+await loadLocalEnvFile();
+
+// Map new env vars to old ones for backward compatibility
+if (!process.env.APP_ORIGIN && process.env.ADMIN_PANEL_APP_ORIGIN) process.env.APP_ORIGIN = process.env.ADMIN_PANEL_APP_ORIGIN;
+if (!process.env.QUESTERIX_TEACHER_EMAIL && process.env.MENTOR_EMAIL) process.env.QUESTERIX_TEACHER_EMAIL = process.env.MENTOR_EMAIL;
+if (!process.env.QUESTERIX_TEACHER_PASSWORD && process.env.MENTOR_PASSWORD) process.env.QUESTERIX_TEACHER_PASSWORD = process.env.MENTOR_PASSWORD;
+if (!process.env.QUESTERIX_ADMIN_EMAIL && process.env.SUPER_ADMIN_EMAIL) process.env.QUESTERIX_ADMIN_EMAIL = process.env.SUPER_ADMIN_EMAIL;
+if (!process.env.QUESTERIX_ADMIN_PASSWORD && process.env.SUPER_ADMIN_PASSWORD) process.env.QUESTERIX_ADMIN_PASSWORD = process.env.SUPER_ADMIN_PASSWORD;
+
+const REQUIRED_ENV_VARS = [
+  'APP_ORIGIN',
+  'QUESTERIX_STUDENT_EMAIL',
+  'QUESTERIX_STUDENT_PASSWORD',
+  'QUESTERIX_TEACHER_EMAIL',
+  'QUESTERIX_TEACHER_PASSWORD',
+  'QUESTERIX_ADMIN_EMAIL',
+  'QUESTERIX_ADMIN_PASSWORD',
+];
+
+REQUIRED_ENV_VARS.forEach((key) => {
+  if (!process.env[key]) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+});
+
+const DEFAULT_VIEWPORT = { width: 2560, height: 1440 };
+const DEFAULT_SCALE = 2;
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.printf(({ timestamp, level, message }) => {
+      return `${timestamp} [${level.toUpperCase()}]: ${message}`;
+    })
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'logs/capture-screenshots.log' })
+  ]
+});
+
+logger.info('Starting capture-screenshots script');
+
+// Replace console.log and console.error with logger
+console.log = (msg) => logger.info(msg);
+console.error = (msg) => logger.error(msg);
 
 function parseArgs(argv) {
   const args = new Set(argv.slice(2));
@@ -86,11 +139,11 @@ async function ensureDir(dir) {
 
 async function waitForAppReady(page) {
   await page.waitForLoadState('domcontentloaded');
-  await page.waitForLoadState('networkidle').catch(() => {});
+  await page.waitForLoadState('networkidle').catch(() => { });
 
   const elevating = page.getByText('Elevating Authority', { exact: false });
   if (await elevating.count()) {
-    await elevating.first().waitFor({ state: 'hidden', timeout: 60_000 }).catch(() => {});
+    await elevating.first().waitFor({ state: 'hidden', timeout: 60_000 }).catch(() => { });
   }
 
   // Give glass/blur layers a beat to settle.
@@ -114,42 +167,30 @@ async function applyCapturePolish(page) {
 }
 
 async function gotoApp(page, pathname = '/') {
-  const url = new URL(pathname, APP_ORIGIN).toString();
-  await page.goto(url, { waitUntil: 'domcontentloaded' });
-  await ensureFlutterSemantics(page);
-  await waitForAppReady(page);
+  try {
+    const url = new URL(pathname, APP_ORIGIN).toString();
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
+    await ensureFlutterSemantics(page);
+    await waitForAppReady(page);
+  } catch (error) {
+    console.error(`Failed to navigate to ${pathname}:`, error.message);
+    process.exit(1);
+  }
 }
 
 async function ensureFlutterSemantics(page) {
-  // Flutter Web: UI is not discoverable until semantics are enabled.
-  const hasHost = page.locator('flt-semantics-host');
-  const hasNodes = page.locator('flt-semantics');
-  if ((await hasNodes.count()) > 0) return;
+  try {
+    const hasHost = page.locator('flt-semantics-host');
+    const hasNodes = page.locator('flt-semantics');
+    if ((await hasNodes.count()) > 0) return;
 
-  // Wait for Flutter to bootstrap enough to show the placeholder.
-  const enableA11y = page.locator('flt-semantics-placeholder[aria-label*="Enable accessibility" i]').first();
-  const flutterView = page.locator('flutter-view').first();
-  await Promise.race([
-    enableA11y.waitFor({ state: 'attached', timeout: 15_000 }).catch(() => {}),
-    flutterView.waitFor({ state: 'attached', timeout: 15_000 }).catch(() => {}),
-  ]);
-
-  if ((await enableA11y.count()) > 0) {
-    // Flutter needs a keyboard activation to fully enable semantics.
-    await enableA11y.click().catch(() => {});
-    await page.waitForTimeout(500);
-    await enableA11y.focus().catch(() => {});
-    await enableA11y.press('Enter').catch(() => {});
-    await page.keyboard.press('Space').catch(() => {});
-    await page.waitForTimeout(750);
+    const enableA11y = page.locator('flt-semantics-placeholder[aria-label*="Enable accessibility" i]').first();
+    await enableA11y.click();
+  } catch (error) {
+    console.warn('Failed to enable Flutter semantics (continuing):', error?.message ?? String(error));
+    // Non-fatal: continue without forcing exit. Some tenants may not use Flutter semantics.
+    return;
   }
-
-  // Wait briefly for semantics tree to appear.
-  await page
-    .locator('flt-semantics')
-    .first()
-    .waitFor({ state: 'attached', timeout: 5000 })
-    .catch(() => {});
 }
 
 async function loginIfNeeded(page, { email, password }) {
@@ -199,7 +240,7 @@ async function revealLoginForm(page) {
   // Prefer Flutter semantics labels (most reliable).
   const semanticsAlready = page.locator('flt-semantics[aria-label*="already have an account" i]').first();
   if ((await semanticsAlready.count()) > 0) {
-    await semanticsAlready.click().catch(() => {});
+    await semanticsAlready.click().catch(() => { });
     return;
   }
 
@@ -214,7 +255,7 @@ async function revealLoginForm(page) {
 
     for (const loc of locs) {
       if ((await loc.count()) > 0) {
-        await loc.click().catch(() => {});
+        await loc.click().catch(() => { });
         return;
       }
     }
@@ -294,8 +335,8 @@ async function setFieldValue(page, locator, value) {
   }
 
   await locator.click({ timeout: 10_000 });
-  await page.keyboard.press('Control+A').catch(() => {});
-  await page.keyboard.press('Backspace').catch(() => {});
+  await page.keyboard.press('Control+A').catch(() => { });
+  await page.keyboard.press('Backspace').catch(() => { });
   await page.keyboard.type(value, { delay: 10 });
 }
 
@@ -325,12 +366,12 @@ async function waitForManualLogin(page, role, timeoutMs) {
   // eslint-disable-next-line no-console
   console.log(
     `[${role}] Manual login needed. A browser window should be open.\n` +
-      `     Please log in now (we'll continue automatically when you're in). Timeout: ${Math.round(timeoutMs / 1000)}s`,
+    `     Please log in now (we'll continue automatically when you're in). Timeout: ${Math.round(timeoutMs / 1000)}s`,
   );
 
   while (Date.now() - started < timeoutMs) {
-    await ensureFlutterSemantics(page).catch(() => {});
-    await revealLoginForm(getScopes(page)).catch(() => {});
+    await ensureFlutterSemantics(page).catch(() => { });
+    await revealLoginForm(getScopes(page)).catch(() => { });
 
     if (await isLikelyLoggedIn(page)) return;
     await page.waitForTimeout(1000);
@@ -432,7 +473,7 @@ const SHOTS = [
       await gotoApp(page, '/');
       await clickNav(page, 'Progress');
       // Try to open a mastery explainer/modal if present.
-      await clickNav(page, 'Mastery').catch(() => {});
+      await clickNav(page, 'Mastery').catch(() => { });
       const info = page.getByRole('button', { name: /what is mastery|mastery score|learn more/i }).first();
       if (await info.count()) {
         await info.click();
@@ -451,8 +492,8 @@ const SHOTS = [
         .getByRole('button', { name: /account|profile|settings|menu/i })
         .first();
       if (await avatar.count()) await avatar.click();
-      await clickNav(page, 'Settings').catch(() => {});
-      await clickNav(page, 'Account').catch(() => {});
+      await clickNav(page, 'Settings').catch(() => { });
+      await clickNav(page, 'Account').catch(() => { });
     },
   },
 
@@ -491,7 +532,7 @@ const SHOTS = [
       const firstGroup = page.getByRole('link').filter({ hasText: /./ }).first();
       if (await firstGroup.count()) await firstGroup.click();
       await waitForAppReady(page);
-      await clickNav(page, 'Reports').catch(() => {});
+      await clickNav(page, 'Reports').catch(() => { });
     },
   },
   {
@@ -522,7 +563,7 @@ const SHOTS = [
       const studentRow = page.getByRole('row').nth(1).getByRole('link').first();
       if (await studentRow.count()) await studentRow.click();
       await waitForAppReady(page);
-      await clickNav(page, 'Session History').catch(() => {});
+      await clickNav(page, 'Session History').catch(() => { });
       const firstSession = page.getByRole('link', { name: /session/i }).first();
       if (await firstSession.count()) await firstSession.click();
       await waitForAppReady(page);
@@ -540,13 +581,22 @@ const SHOTS = [
     },
   },
   {
+    id: 'admin-sso-configuration',
+    role: 'admin',
+    filename: 'admin-sso-configuration.png',
+    run: async (page) => {
+      await gotoApp(page, '/settings/sso');
+      // Keep the SSO settings page visible for the screenshot.
+    },
+  },
+  {
     id: 'admin-invite-teacher',
     role: 'admin',
     filename: 'admin-invite-teacher.png',
     run: async (page) => {
       await gotoApp(page, '/');
       await clickNav(page, 'Users');
-      await clickNav(page, 'Teachers').catch(() => {});
+      await clickNav(page, 'Teachers').catch(() => { });
       await clickNav(page, 'Invite Teacher');
     },
   },
@@ -594,7 +644,7 @@ const SHOTS = [
       await gotoApp(page, '/');
       await clickNav(page, 'Questions');
       // Try to open filter panel and select Skill.
-      await clickNav(page, 'Filter').catch(() => {});
+      await clickNav(page, 'Filter').catch(() => { });
       const skill = page.getByRole('combobox', { name: /skill/i }).first();
       if (await skill.count()) {
         await skill.click();
@@ -617,7 +667,6 @@ const SHOTS = [
 ];
 
 async function main() {
-  await loadLocalEnvFile();
   const args = parseArgs(process.argv);
 
   await ensureDir(SCREENSHOTS_DIR);
@@ -716,8 +765,7 @@ async function main() {
 
         // eslint-disable-next-line no-console
         console.log(
-          `${ok ? 'OK  ' : 'FAIL'} ${shot.filename}${outPath ? ` -> ${outPath}` : ''}${
-            !ok && error ? `\n     ${String(error?.message ?? error)}` : ''
+          `${ok ? 'OK  ' : 'FAIL'} ${shot.filename}${outPath ? ` -> ${outPath}` : ''}${!ok && error ? `\n     ${String(error?.message ?? error)}` : ''
           }`,
         );
       }

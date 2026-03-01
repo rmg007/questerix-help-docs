@@ -14,6 +14,10 @@ This page covers everything you need to manage teacher, student, and parent acco
 2. Use **Users → Students** to create, import, or deactivate students.
 3. Link parent accounts from a student’s profile.
 
+::: tip Note
+Deactivating a user preserves their historical data (e.g., groups, student progress) for future reference.
+:::
+
 **Verification:** The person appears in the correct list with the right status (Active / Pending / Deactivated).
 
 ---
@@ -120,7 +124,9 @@ The parent receives an invitation to set their password. Once set up, they can l
 2. Find the parent in the **Linked Parent** section.
 3. Click **Remove**.
 
-The parent account continues to exist but can no longer view that student's data.
+::: warning Caution
+Removing a parent link does not delete the parent’s account. It only unlinks them from the student.
+:::
 
 ---
 

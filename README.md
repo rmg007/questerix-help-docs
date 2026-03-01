@@ -104,3 +104,32 @@ We don’t use the Figma MCP in this repo.
 
 - **MCP setup guide**: `.cursor/README.md`
 - **Team-shared MCP config**: `.cursor/mcp.json`
+
+## Environment Setup
+
+1. Create a `.env` file in the root directory based on `.env.screenshots.local.example`.
+2. Fill in the required values:
+   - `APP_ORIGIN`: The base URL of the application.
+   - `QUESTERIX_STUDENT_EMAIL` and `QUESTERIX_STUDENT_PASSWORD`: Credentials for the student role.
+   - `QUESTERIX_TEACHER_EMAIL` and `QUESTERIX_TEACHER_PASSWORD`: Credentials for the teacher role.
+   - `QUESTERIX_ADMIN_EMAIL` and `QUESTERIX_ADMIN_PASSWORD`: Credentials for the admin role.
+
+## Running Scripts
+
+### Capture Screenshots
+
+```bash
+node scripts/capture-screenshots.mjs
+```
+
+- Ensure the `.env` file is properly configured.
+- Screenshots are saved in `public/screenshots/`.
+
+### Debug Authentication
+
+```bash
+node scripts/debug-auth.mjs
+```
+
+- Use this script to test login credentials and app accessibility.
+- Requires the `APP_ORIGIN` and role credentials to be set in `.env`.

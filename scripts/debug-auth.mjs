@@ -1,129 +1,108 @@
 import { chromium } from 'playwright';
+import dotenv from 'dotenv';
+import winston from 'winston';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
-const APP_ORIGIN = 'https://app.questerix.com';
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+dotenv.config({ path: envFile });
 
-async function main() {
-  const headed = process.argv.includes('--headed');
-  const browser = await chromium.launch({ headless: !headed });
-  const context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
-  const page = await context.newPage();
+console.log(`Loaded environment variables from ${envFile}`);
 
-  await page.goto(APP_ORIGIN, { waitUntil: 'domcontentloaded' });
-  // Flutter bootstrap can take a few seconds (and Cloudflare may inject challenge scripts).
-  await page.waitForTimeout(8000);
+const REPO_ROOT = path.resolve(process.cwd());
+const LOCAL_ENV_PATH = path.join(REPO_ROOT, '.env.screenshots.local');
 
-  // eslint-disable-next-line no-console
-  console.log('Page URL:', page.url());
-  // eslint-disable-next-line no-console
-  console.log('Frames:', page.frames().length);
+async function loadLocalEnvFile() {
+  try {
+    const raw = await fs.readFile(LOCAL_ENV_PATH, 'utf8');
+    const lines = raw.split(/\r?\n/);
 
-  // eslint-disable-next-line no-console
-  console.log('canvas count:', await page.locator('canvas').count());
-  // eslint-disable-next-line no-console
-  console.log('iframe count:', await page.locator('iframe').count());
-  // eslint-disable-next-line no-console
-  console.log('body child tags:', await page.evaluate(() => Array.from(document.body?.children ?? []).map((n) => n.tagName)));
-  console.log('flutter-view count:', await page.locator('flutter-view').count());
-  console.log('flt-glass-pane count:', await page.locator('flt-glass-pane').count());
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const idx = trimmed.indexOf('=');
+      if (idx <= 0) continue;
 
-  const bodyText = await page.evaluate(() => document.body?.innerText ?? '');
-  // eslint-disable-next-line no-console
-  console.log('body.innerText (first 400 chars):', JSON.stringify(bodyText.slice(0, 400)));
+      const key = trimmed.slice(0, idx).trim();
+      let value = trimmed.slice(idx + 1).trim();
 
-  const htmlSnippet = await page.evaluate(() => document.body?.innerHTML?.slice(0, 800) ?? '');
-  // eslint-disable-next-line no-console
-  console.log('body.innerHTML (first 800 chars):', htmlSnippet.replace(/\s+/g, ' ').slice(0, 800));
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1);
+      }
 
-  // Try enabling Flutter semantics.
-  const enable = page.locator('flt-semantics-placeholder[aria-label*="Enable accessibility" i]').first();
-  console.log('\nEnable accessibility placeholder present:', (await enable.count()) > 0);
-  if (await enable.count()) {
-    await enable.click().catch(() => {});
-    await page.waitForTimeout(1000);
-    await enable.focus().catch(() => {});
-    await enable.press('Enter').catch(() => {});
-    await page.keyboard.press('Space').catch(() => {});
-    await page.waitForTimeout(3000);
-  }
-
-  const semanticsCount = await page.locator('flt-semantics').count();
-  console.log('flt-semantics count after click:', semanticsCount);
-  console.log('flt-semantics-host count:', await page.locator('flt-semantics-host').count());
-  console.log('flt-semantics-container count:', await page.locator('flt-semantics-container').count());
-  console.log('flt-semantics-node count:', await page.locator('flt-semantics-node').count());
-  console.log('flt-semantics-role count:', await page.locator('flt-semantics[role]').count());
-  const alreadyCount = await page.locator('flt-semantics[aria-label*="already have" i]').count();
-  console.log('semantics nodes containing "already have":', alreadyCount);
-  const labels = await page.evaluate(() => {
-    const nodes = Array.from(document.querySelectorAll('flt-semantics[aria-label]')).slice(0, 30);
-    return nodes.map((n) => n.getAttribute('aria-label'));
-  });
-  console.log('First 30 aria-labels:', labels);
-
-  const fltTags = await page.evaluate(() => {
-    const tags = new Set();
-    for (const el of Array.from(document.querySelectorAll('*'))) {
-      const t = el.tagName.toLowerCase();
-      if (t.startsWith('flt-') || t.startsWith('flutter-')) tags.add(t);
-    }
-    return Array.from(tags).sort();
-  });
-  console.log('All flutter/flt tags present:', fltTags);
-
-  const semanticsShadowInfo = await page.evaluate(() => {
-    const host = document.querySelector('flt-semantics-host');
-    if (!host) return { hostFound: false };
-    const sr = host.shadowRoot;
-    if (!sr) return { hostFound: true, shadowRoot: null };
-    const nodeCount = sr.querySelectorAll('*').length;
-    const ariaCount = sr.querySelectorAll('[aria-label]').length;
-    const sample = Array.from(sr.querySelectorAll('[aria-label]'))
-      .slice(0, 30)
-      .map((n) => n.getAttribute('aria-label'));
-    const tags = Array.from(new Set(Array.from(sr.querySelectorAll('*')).map((n) => n.tagName.toLowerCase()))).slice(0, 40);
-    return { hostFound: true, shadowRoot: { nodeCount, ariaCount, sample, tags } };
-  });
-  console.log('Semantics host shadow info:', semanticsShadowInfo);
-
-  // Navigate into login flow to inspect field labels.
-  const alreadyBtn = page.locator('flt-semantics[aria-label*="already have an account" i]').first();
-  console.log('\nAlready-have-account semantics present:', (await alreadyBtn.count()) > 0);
-  if (await alreadyBtn.count()) {
-    await alreadyBtn.click().catch(() => {});
-    await page.waitForTimeout(4000);
-
-    const afterLabels = await page.evaluate(() => {
-      const nodes = Array.from(document.querySelectorAll('flt-semantics[aria-label]')).slice(0, 80);
-      return nodes.map((n) => n.getAttribute('aria-label'));
-    });
-    console.log('After clicking already-have-account (first 80 aria-labels):', afterLabels);
-
-    console.log('textbox roles count:', await page.getByRole('textbox').count().catch(() => -1));
-    console.log('button roles count:', await page.getByRole('button').count().catch(() => -1));
-  }
-
-  const targets = [/already have an account/i, /get started/i, /email/i, /password/i, /log in|sign in/i];
-
-  for (const frame of page.frames()) {
-    // eslint-disable-next-line no-console
-    console.log('\n---');
-    // eslint-disable-next-line no-console
-    console.log('Frame URL:', frame.url());
-
-    for (const t of targets) {
-      try {
-        const count = await frame.getByText(t).count();
-        if (count) {
-          // eslint-disable-next-line no-console
-          console.log(`text ${String(t)}: ${count}`);
-        }
-      } catch {
-        // ignore
+      if (!key) continue;
+      if (process.env[key] == null || process.env[key] === '') {
+        process.env[key] = value;
       }
     }
+  } catch {
+    // No local env file; ignore.
   }
+}
 
-  await browser.close();
+await loadLocalEnvFile();
+
+if (!process.env.APP_ORIGIN && process.env.ADMIN_PANEL_APP_ORIGIN) process.env.APP_ORIGIN = process.env.ADMIN_PANEL_APP_ORIGIN;
+if (!process.env.QUESTERIX_TEACHER_EMAIL && process.env.MENTOR_EMAIL) process.env.QUESTERIX_TEACHER_EMAIL = process.env.MENTOR_EMAIL;
+if (!process.env.QUESTERIX_TEACHER_PASSWORD && process.env.MENTOR_PASSWORD) process.env.QUESTERIX_TEACHER_PASSWORD = process.env.MENTOR_PASSWORD;
+if (!process.env.QUESTERIX_ADMIN_EMAIL && process.env.SUPER_ADMIN_EMAIL) process.env.QUESTERIX_ADMIN_EMAIL = process.env.SUPER_ADMIN_EMAIL;
+if (!process.env.QUESTERIX_ADMIN_PASSWORD && process.env.SUPER_ADMIN_PASSWORD) process.env.QUESTERIX_ADMIN_PASSWORD = process.env.SUPER_ADMIN_PASSWORD;
+
+const REQUIRED_ENV_VARS = [
+  'APP_ORIGIN',
+  'QUESTERIX_STUDENT_EMAIL',
+  'QUESTERIX_STUDENT_PASSWORD',
+  'QUESTERIX_TEACHER_EMAIL',
+  'QUESTERIX_TEACHER_PASSWORD',
+  'QUESTERIX_ADMIN_EMAIL',
+  'QUESTERIX_ADMIN_PASSWORD',
+];
+
+REQUIRED_ENV_VARS.forEach((key) => {
+  if (!process.env[key]) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+});
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.printf(({ timestamp, level, message }) => {
+      return `${timestamp} [${level.toUpperCase()}]: ${message}`;
+    })
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'logs/debug-auth.log' })
+  ]
+});
+
+logger.info('Starting debug-auth script');
+
+// Replace console.log and console.error with logger
+console.log = (msg) => logger.info(msg);
+console.error = (msg) => logger.error(msg);
+
+async function main() {
+  try {
+    const headed = process.argv.includes('--headed');
+    const browser = await chromium.launch({ headless: !headed });
+    const context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+    const page = await context.newPage();
+
+    await page.goto(process.env.APP_ORIGIN, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(8000);
+
+    console.log('Page URL:', page.url());
+    console.log('Frames:', page.frames().length);
+  } catch (error) {
+    console.error('Error during authentication debugging:', error.message);
+    process.exit(1);
+  }
 }
 
 main().catch((e) => {
