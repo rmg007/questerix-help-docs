@@ -2,18 +2,12 @@
 
 ---
 
-## 🔴 MANDATORY TASK CLOSE CHECKLIST — Run After EVERY Task
+## Task Tiers (Read First)
+if message contains `// quick` or `// light`: TIER S — skip all bootstrap, Cortex, and close checklist
+if message contains `// full` or `// sprint`: TIER L — full bootstrap, Cortex plan/verify, full session close
+default: TIER M — read SKELETON_SUMMARY.md only, update tasks.md, batch session close
 
-> **This runs after EVERY task, not just at end of session.**
-> Do not sign off or say "done" until all 4 steps are complete.
-
-- [ ] **1. TIME_LOG** — Add a row to `docs/TIME_LOG.md` (main Questerix repo) with: date, time range, hours, app(s) = `Help Docs`, work type (`docs`/`ops`), description. Recalculate monthly total + YTD.
-- [ ] **2. LEARNING_LOG** — Append session summary to `docs/LEARNING_LOG.md` (main Questerix repo).
-- [ ] **3. Temp Files** — Delete any scratch files, debug scripts, or `/tmp/` files created during this task.
-- [ ] **4. tasks.md** — Mark completed tasks `[x]`. Add any newly discovered sub-tasks.
-
-> ❌ Skipping any step = **non-compliant session**. The user has explicitly flagged this pattern.
-> Both TIME_LOG and LEARNING_LOG live in the **main Questerix repo**, not in this repo.
+> These rules inherit from the universal rules in `Questerix/AGENTS.md`.
 
 ---
 
