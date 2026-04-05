@@ -1,0 +1,20 @@
+{
+  "servers": {
+    "pare-git": {
+      "command": "npx",
+      "args": ["-y", "@paretools/git"]
+    },
+    "pare-npm": {
+      "command": "npx",
+      "args": ["-y", "@paretools/npm"]
+    },
+    "pare-test": {
+      "command": "npx",
+      "args": ["-y", "@paretools/test"]
+    },
+    "pare-typescript": {
+      "command": "npx",
+      "args": ["-y", "@paretools/typescript"]
+    }
+  }
+}

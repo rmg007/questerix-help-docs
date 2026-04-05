@@ -1,9 +1,6 @@
-/* =============================================================
-   Questerix Design Tokens — Static Copy for VitePress Theme
-   Source: design-system/generated/css-variables.css
-   Last synced: 2026-02-22
-   To update: manually copy from the main repo's generated file.
-   ============================================================= */
+/* GENERATED CODE - DO NOT MODIFY BY HAND */
+/* Generated from design-system/tokens/*.json */
+/* Run: pwsh design-system/generators/generate-tailwind.ps1 */
 
 :root {
   /* Brand Colors */
@@ -39,30 +36,44 @@
   --theme-border: #E2E8F0;
   --theme-border-focus: #319795;
 
-  /* Map to VitePress CSS variables */
-  --vp-c-brand-1: #319795;
-  --vp-c-brand-2: #2C8180;
-  --vp-c-brand-3: #6B46C1;
-  --vp-c-brand-soft: rgba(49, 151, 149, 0.1);
-
   /* Typography */
   --font-sans: Inter, system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  --vp-font-family-base: var(--font-sans);
-  --vp-font-family-mono: var(--font-mono);
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
 
   /* Border Radius */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
-  --vp-border-radius: var(--radius-md);
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, #319795 0%, #6B46C1 100%);
+  --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 /* Dark Theme */
-.dark {
+.dark, [data-theme="dark"] {
   --theme-background: #171923;
   --theme-surface: #1A202C;
   --theme-surface-variant: #2D3748;
@@ -71,6 +82,4 @@
   --theme-text-muted: #A0AEC0;
   --theme-border: #4A5568;
   --theme-border-focus: #4FD1C5;
-
-  --vp-c-brand-soft: rgba(79, 209, 197, 0.1);
 }

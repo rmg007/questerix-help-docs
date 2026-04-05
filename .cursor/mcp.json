@@ -3,6 +3,12 @@
     "sequential-thinking": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    "supermemory": {
+      "url": "https://mcp.supermemory.ai/mcp",
+      "headers": {
+        "Authorization": "Bearer sm_CgG5QDcvgwgL4tecVjDo5h_HCylfugrTBTbIwuuuOhytZqUJqnESpYkZZnGsaCKZWKekgGxSWhmLIlfNnTVHTDv"
+      }
     }
   }
 }

@@ -1,0 +1,26 @@
+{
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/package-lock.json": true,
+    "dist": true,
+    ".vitepress/dist": true,
+    ".vitepress/cache": true,
+    ".playwright": true,
+    "playwright-report": true,
+    ".cache": true,
+    "**/*.min.js": true,
+    "**/*.min.css": true
+  },
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    ".vitepress/dist/**": true,
+    ".vitepress/cache/**": true
+  }
+}

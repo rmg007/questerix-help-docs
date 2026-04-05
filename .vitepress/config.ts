@@ -5,6 +5,15 @@ export default defineConfig({
   title: 'Questerix Help Center',
   description: 'Guides for parents, teachers, and school admins on the Questerix platform.',
   cleanUrls: true,
+  srcExclude: [
+    '**/README.md',
+    '**/TODO.md',
+    '**/AGENTS.md',
+    '**/AI_CONTEXT.md',
+    '**/AGENT_AUTOMATION.md',
+    '**/PROJECT_CONTEXT.md',
+    '**/CONTRIBUTING.md',
+  ],
   head: [
     ['meta', { name: 'theme-color', content: '#5b4fcf' }],
   ],

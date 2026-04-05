@@ -2,11 +2,11 @@
 
 # SSO configuration
 
-Problem
+**Problem:**
 
 - You need to let your school sign in with a single sign-on (SSO) provider, but you don’t know where to set it up.
 
-Solution
+**Solution:**
 
 1. Go to the Settings menu in the admin panel.
 2. Open the **Single sign-on** (SSO) section.
@@ -19,7 +19,7 @@ Solution
 
 ![SSO settings panel showing Add provider button and provider list](/screenshots/admin-sso-configuration.png)
 
-Verification
+**Verification:**
 
 - After saving, click **Test** next to the provider. You should see a success message.
 - Try signing in with an SSO account in a private browser window.

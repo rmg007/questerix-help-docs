@@ -1,15 +1,7 @@
-# Questerix Help Center — Agent Instructions
+# Agent Rules - Help Documentation
 
----
-
-## Task Tiers (Read First)
-if message contains `// quick` or `// light`: TIER S — skip all bootstrap, Cortex, and close checklist
-if message contains `// full` or `// sprint`: TIER L — full bootstrap, Cortex plan/verify, full session close
-default: TIER M — read SKELETON_SUMMARY.md only, update tasks.md, batch session close
-
-> These rules inherit from the universal rules in `Questerix/AGENTS.md`.
-
----
+> **Inherit ALL rules from `../AGENTS.md` (master file for all IDEs)**
+> **This file contains ONLY help-docs-specific rules and overrides.**
 
 ## Persona
 
@@ -36,40 +28,6 @@ This is the **user help center** for Questerix — an educational platform for s
 2. **Format every guide** using: Problem → Solution → Verification.
 3. **Empathetic tone**: Assume the user is confused or frustrated. Be calm and helpful.
 4. **Active voice**: "Click the button" not "The button should be clicked."
-5. **Screenshots are mandatory** for every multi-step process. Reference them as `![Step description](/screenshots/feature-name.png)`.
-
-## Content Structure
-
-```
-.vitepress/           # VitePress config and theme
-parents/              # All parent-facing guides
-teachers/             # All teacher-facing guides
-admins/               # All admin-facing guides
-public/
-  screenshots/        # Manual screenshots (added by human or agent)
-_incoming/            # Drop zone for Feature Snapshots from Core repo
-                      # AI drafts content here before it is published
-```
-
-## Updating the Site
-
-When a "Feature Snapshot" appears in `_incoming/`:
-
-1. Read the Snapshot carefully.
-2. Identify which persona pages it affects (parents / teachers / admins).
-3. Update ONLY the affected `.md` files — do not rewrite unrelated pages.
-4. Add a `<!-- Last updated: YYYY-MM-DD -->` comment at the top of every changed file.
-5. Note which screenshots are now stale in `SCREENSHOT_CATALOG.md`.
-
-## Agent Automation (new)
-
-This repository supports automated coding agents (Cursor, Windsurf, Antigravity IDE, Kiro, etc.) that help capture screenshots, update docs, and deploy changes. The detailed, step-by-step agent workflow is in `AGENT_AUTOMATION.md`. Agents must follow the security rules in that file and never commit secrets.
-
-## Deployment Rules
-
-- **DO NOT** connect `help.questerix.com` domain until explicitly instructed.
-- Run locally: `npm run dev`
-- Build: `npm run build` → output in `.vitepress/dist`
 
 ## Constraints
 
